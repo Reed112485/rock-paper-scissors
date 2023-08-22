@@ -1,88 +1,79 @@
 /* 
-Get choice of computer
- - use math.random to set a random number between 1-3
- - Assign a choice to each number with an if statement
- - return the choice
- 
- Get choice of player
- - prompt for choice
- - use if statement to determine choice
- - return the choice
+Get a random choice:
+- create an array of the choices
+- create a variable that chooses a random number(index) based on the array length
+- return the array index that was randomly chosen
 
- Compare choices for a winner
- - assign computer choice to a variable by calling function, using return value
- - assign player choice to a variable by calling function, using return value
+Create a playRound function:
+- use the player choice and cpu choice as parameters
+- use an if statement
+- if the player choice is equal to the cpu choice, return tie
+- if any of the player win conditions are true, return player, use OR
+- in any other case, return cpu
 
-Keep track of the score
-- assign winner function to a variable
-- use that variable to accrue a score for each player
--- if the winner was cpu, add to cpu score. Otherwise add to p1 score.
-- return the scores
- 
- Play five rounds and then terminate
- - loop through the game five times with a for statement
- - use score keeping function to keep score
- - output the winner and the scores
- */
+Create a playFive or playGame or whatever function:
+- create a variable for the player score
+- create a variable for the cpu score
 
- function getComputerChoice() {
-    const choice = Math.floor(Math.random() * (4 - 1) + 1);
+- create a for loop which loops five times
+-- assign a variable to the player choice which prompts for a choice and returns lower case
+-- assign a variable to the cpu choice which uses the random choice function
+-- create a result variable which plays a round, which will return the result
+-- console.log the round number and what you and the cpu chose
 
-    if (choice === 1) {
-        return "Rock";
-    } else if (choice === 2) {
-        return "Paper";
+- create an if statement in the foor loop
+-- if the result (contains return from playing a round) = player, increase the player score and console.log a message saying you won the round
+-- if the result = cpu, increase the cpu score and write a message saying the cpu won
+-- else, output that it was a draw
+
+- INSIDE the for but OUTSIDE the if:
+-- log that the game has ended and output the scores
+
+Call the function which plays the game
+*/
+
+function getRandom() {
+    const choices = ["rock", "paper", "scissors"];
+    const random = Math.floor(Math.random() * choices.length);
+
+    return choices[random];
+}
+
+function playRound(playerChoice, cpuChoice) {
+    if (playerChoice === cpuChoice) {
+        return "tie";
+    } else if (playerChoice === "rock" && cpuChoice === "scissors" ||
+               playerChoice === "paper" && cpuChoice === "rock" ||
+               playerChoice === "scissors" && cpuChoice === "paper") {
+        return "player";
     } else {
-        return "Scissors";
-    }
- }
-
-function getPlayerChoice() {
-    let choice = prompt ("Press 1 for Rock, 2 for Paper, or 3 for Scissors ");
-
-    if (choice === "1") {
-        return "Rock";
-    } else if (choice === "2") {
-        return "Paper";
-    } else {
-        return "Scissors";
+        return "cpu";
     }
 }
 
-function playRound(computerChoice, playerChoice) {
+function playFive() {
+    let playerScore = 0;
+    let cpuScore = 0;
 
-    if (computerChoice === "Rock" && playerChoice === "Rock") {
-        console.log(`Player chose Rock, CPU chose Rock.`);
-        return "It's a Tie!";
-    } else if (computerChoice === "Rock" && playerChoice === "Paper") {
-        console.log(`Player chose Paper, CPU chose Rock.`);
-        return "Player wins!";
-    } else if (computerChoice === "Rock" && playerChoice === "Scissors") {
-        console.log(`Player chose Scissors, CPU chose Rock.`);
-        return "CPU wins!";
+    for (i = 0; i < 5; i++) {
+        const playerChoice = prompt("Rock, Paper, or Scissors?").toLowerCase();
+        const cpuChoice = getRandom();
+
+        const result = playRound(playerChoice, cpuChoice);
+        console.log(`Round ${i + 1}: You chose: ${playerChoice} -- CPU chose: ${cpuChoice}`);
+
+        if (result === "player") {
+            playerScore++;
+            console.log(`You win!`);
+        } else if (result === "cpu") {
+            cpuScore++;
+            console.log(`CPU wins =(`);
+        } else {
+            console.log(`It's a tie!`)
+        }
     }
 
-    if (computerChoice === "Paper" && playerChoice === "Rock") {
-        console.log(`Player chose Rock, CPU chose Paper.`);
-        return "CPU wins!";
-    } else if (computerChoice === "Paper" && playerChoice === "Paper") {
-        console.log(`Player chose Paper, CPU chose Paper.`);
-        return "It's a Tie!";
-    } else if (computerChoice === "Paper" && playerChoice === "Scissors") {
-        console.log(`Player chose Scissors, CPU chose Paper.`);
-        return "Player wins!";
-    }
-
-    if (computerChoice === "Scissors" && playerChoice === "Rock") {
-        console.log(`Player chose Rock, CPU chose Scissors.`);
-        return "Player wins!";
-    } else if (computerChoice === "Scissors" && playerChoice === "Paper") {
-        console.log(`Player chose Paper, CPU chose Scissors.`);
-        return "CPU wins!";
-    } else if (computerChoice === "Scissors" && playerChoice === "Scissors") {
-        console.log(`Player chose Scissors, CPU chose Scissors.`);
-        return "It's a Tie!";
-    }
+    console.log(`::Game Over::\nYour Score: ${playerScore}\nCPU Score: ${cpuScore}`);
 }
 
-playRound(getComputerChoice(), getPlayerChoice());
+playFive();
